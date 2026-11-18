@@ -1,1 +1,1762 @@
 
+<!DOCTYPE html>
+<html lang="tg">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <title>ММТ / ИМД: Механика ва Термодинамика (5-А ва 5-В)</title>
+  <style>
+    :root {
+      --primary: #1d4ed8;
+      --primary-dark: #1e40af;
+      --primary-light: #eff6ff;
+      --accent: #0f172a;
+      --bg: #f1f5f9;
+      --card: #ffffff;
+      --text: #0f172a;
+      --muted: #64748b;
+      --border: #e2e8f0;
+      --success: #16a34a;
+      --danger: #dc2626;
+      --whatsapp: #25D366;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+      -webkit-user-select: none;
+      user-select: none;
+    }
+
+    input, select, textarea {
+      -webkit-user-select: auto;
+      user-select: auto;
+    }
+
+    html, body {
+      width: 100%;
+      height: 100dvh;
+      max-height: 100dvh;
+      overflow: hidden;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      font-size: 15px;
+      line-height: 1.45;
+    }
+
+    @media print {
+      body { display: none !important; }
+    }
+
+    #app {
+      width: 100%;
+      height: 100dvh;
+      max-width: 640px;
+      margin: 0 auto;
+      background: var(--card);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      position: relative;
+    }
+
+    @media (min-width: 641px) {
+      body { background: #0f172a; }
+      #app { box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4); }
+    }
+
+    /* Privacy / Anti-cheat Shield */
+    #privacyShield {
+      position: fixed;
+      inset: 0;
+      background: #0f172a;
+      color: #ffffff;
+      z-index: 9999;
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 24px;
+      gap: 12px;
+    }
+
+    #privacyShield.active {
+      display: flex;
+    }
+
+    /* Dynamic Watermark Overlay during exam */
+    #watermarkOverlay {
+      position: absolute;
+      inset: 44px 0 50px 0;
+      pointer-events: none;
+      z-index: 15;
+      overflow: hidden;
+      display: none;
+      opacity: 0.065;
+      font-size: 13px;
+      font-weight: 800;
+      color: #0f172a;
+      transform: rotate(-22deg) scale(1.25);
+      align-content: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 28px;
+      padding: 10px;
+    }
+
+    /* Ultra-Compact Top Bar (44px) */
+    .top-bar {
+      height: 44px;
+      min-height: 44px;
+      background: linear-gradient(90deg, #1e3a8a, #2563eb);
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 8px;
+      gap: 6px;
+      z-index: 20;
+    }
+
+    .top-bar-left {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      min-width: 0;
+      flex: 1;
+    }
+
+    .timer-pill {
+      background: rgba(255, 255, 255, 0.18);
+      border: 1px solid rgba(255, 255, 255, 0.28);
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-weight: 700;
+      font-size: 13px;
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .timer-pill.warning {
+      background: #dc2626;
+      border-color: #fca5a5;
+      animation: pulse 1s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.75; }
+    }
+
+    .student-badge {
+      font-size: 12px;
+      font-weight: 600;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      opacity: 0.95;
+    }
+
+    .top-bar-actions {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      flex-shrink: 0;
+    }
+
+    .icon-btn {
+      background: rgba(255, 255, 255, 0.16);
+      border: 1px solid rgba(255, 255, 255, 0.28);
+      color: #ffffff;
+      height: 30px;
+      padding: 0 8px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+    }
+
+    .icon-btn:active {
+      background: rgba(255, 255, 255, 0.3);
+    }
+
+    .screen {
+      display: none;
+      flex-direction: column;
+      flex: 1;
+      height: 100%;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .screen.active {
+      display: flex;
+    }
+
+    /* Start Screen */
+    .start-body {
+      flex: 1;
+      overflow-y: auto;
+      padding: 14px 16px 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .fs-banner-btn {
+      width: 100%;
+      padding: 10px 12px;
+      background: #0f172a;
+      color: #ffffff;
+      border: none;
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .hero-card {
+      background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
+      color: #ffffff;
+      border-radius: 14px;
+      padding: 16px;
+      box-shadow: 0 6px 18px rgba(37, 99, 235, 0.22);
+    }
+
+    .hero-tag {
+      display: inline-block;
+      background: rgba(255, 255, 255, 0.2);
+      font-size: 11px;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 999px;
+      margin-bottom: 6px;
+    }
+
+    .hero-card h1 {
+      font-size: 20px;
+      font-weight: 800;
+      line-height: 1.25;
+      margin-bottom: 4px;
+    }
+
+    .hero-card p {
+      font-size: 13px;
+      opacity: 0.92;
+    }
+
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .stat-box {
+      background: rgba(255, 255, 255, 0.14);
+      border-radius: 8px;
+      padding: 7px 6px;
+      text-align: center;
+    }
+
+    .stat-val { font-size: 15px; font-weight: 800; }
+    .stat-lbl { font-size: 11px; opacity: 0.85; }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .form-label {
+      font-size: 13px;
+      font-weight: 700;
+      color: #334155;
+    }
+
+    .text-input {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--text);
+      background: #f8fafc;
+      outline: none;
+    }
+
+    .text-input:focus {
+      border-color: var(--primary);
+      background: #ffffff;
+    }
+
+    /* Group Selector: ONLY 5-А and 5-В */
+    .group-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .group-btn {
+      padding: 13px 10px;
+      border: 2px solid var(--border);
+      border-radius: 10px;
+      background: #f8fafc;
+      font-size: 16px;
+      font-weight: 800;
+      color: #334155;
+      cursor: pointer;
+      text-align: center;
+    }
+
+    .group-btn.selected {
+      border-color: var(--primary);
+      background: var(--primary-light);
+      color: var(--primary-dark);
+    }
+
+    .error-msg {
+      color: var(--danger);
+      font-size: 13px;
+      font-weight: 600;
+      min-height: 18px;
+    }
+
+    .primary-btn {
+      width: 100%;
+      padding: 14px;
+      background: linear-gradient(90deg, #1d4ed8, #2563eb);
+      color: #ffffff;
+      border: none;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: 0 4px 14px rgba(37, 99, 235, 0.32);
+    }
+
+    /* Question Navigation Strip */
+    .q-nav-strip {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      padding: 6px 10px;
+      background: #f8fafc;
+      border-bottom: 1px solid var(--border);
+      overflow-x: auto;
+      scrollbar-width: none;
+      min-height: 40px;
+    }
+
+    .q-nav-strip::-webkit-scrollbar { display: none; }
+
+    .q-dot {
+      min-width: 28px;
+      height: 28px;
+      border-radius: 7px;
+      border: 1.5px solid #cbd5e1;
+      background: #ffffff;
+      color: #475569;
+      font-size: 12px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+
+    .q-dot.answered {
+      background: #dbeafe;
+      border-color: #3b82f6;
+      color: #1e40af;
+    }
+
+    .q-dot.current {
+      background: #1d4ed8;
+      border-color: #1d4ed8;
+      color: #ffffff;
+      transform: scale(1.06);
+    }
+
+    .q-scroll-area {
+      flex: 1;
+      overflow-y: auto;
+      padding: 12px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      z-index: 2;
+    }
+
+    .q-meta-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .q-part-badge {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border: 1px solid #bfdbfe;
+      font-size: 11px;
+      font-weight: 800;
+      padding: 3px 8px;
+      border-radius: 6px;
+    }
+
+    .q-topic-text {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--muted);
+    }
+
+    .q-text {
+      font-size: 16px;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.48;
+      background: #f8fafc;
+      padding: 12px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+    }
+
+    .options-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .option-card {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 11px 12px;
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      background: #ffffff;
+      cursor: pointer;
+      text-align: left;
+    }
+
+    .option-card.selected {
+      border-color: var(--primary);
+      background: #eff6ff;
+    }
+
+    .option-letter {
+      width: 28px;
+      height: 28px;
+      min-width: 28px;
+      border-radius: 7px;
+      background: #f1f5f9;
+      color: #334155;
+      font-weight: 800;
+      font-size: 13px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .option-card.selected .option-letter {
+      background: var(--primary);
+      color: #ffffff;
+    }
+
+    .option-text {
+      font-size: 15px;
+      font-weight: 600;
+      color: #1e293b;
+    }
+
+    .matching-box {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .match-choices-ref {
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 8px 10px;
+      font-size: 13px;
+      color: #334155;
+    }
+
+    .match-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      padding: 8px 10px;
+      border: 1px solid var(--border);
+      border-radius: 9px;
+      background: #ffffff;
+    }
+
+    .match-prompt {
+      font-size: 14px;
+      font-weight: 600;
+      flex: 1;
+    }
+
+    .match-select {
+      padding: 7px 10px;
+      border-radius: 7px;
+      border: 1.5px solid #cbd5e1;
+      font-size: 14px;
+      font-weight: 700;
+      background: #f8fafc;
+      color: #0f172a;
+      min-width: 72px;
+    }
+
+    .numeric-box {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      background: #f8fafc;
+      padding: 12px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+    }
+
+    .bottom-nav {
+      height: 50px;
+      min-height: 50px;
+      border-top: 1px solid var(--border);
+      background: #ffffff;
+      padding: 6px 10px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      z-index: 20;
+    }
+
+    .nav-btn {
+      flex: 1;
+      height: 36px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: #f8fafc;
+      color: #1e293b;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .nav-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+    .nav-btn.next { background: var(--primary); color: #ffffff; border-color: var(--primary); }
+    .nav-btn.finish { background: var(--success); color: #ffffff; border-color: var(--success); }
+
+    .res-scroll {
+      flex: 1;
+      overflow-y: auto;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+    }
+
+    .min-result-card {
+      width: 100%;
+      background: #ffffff;
+      border: 1.5px solid var(--border);
+      border-radius: 16px;
+      padding: 18px 16px;
+      text-align: center;
+      box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .min-badge {
+      display: inline-block;
+      margin: 0 auto;
+      background: #eff6ff;
+      color: #1d4ed8;
+      font-size: 12px;
+      font-weight: 800;
+      padding: 4px 12px;
+      border-radius: 999px;
+    }
+
+    .min-name {
+      font-size: 19px;
+      font-weight: 800;
+      color: #0f172a;
+    }
+
+    .min-group {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--muted);
+      margin-top: -8px;
+    }
+
+    .min-score-circle {
+      background: linear-gradient(135deg, #1e3a8a, #2563eb);
+      color: #ffffff;
+      border-radius: 14px;
+      padding: 14px;
+    }
+
+    .min-score-num {
+      font-size: 36px;
+      font-weight: 900;
+      line-height: 1.1;
+    }
+
+    .min-stats-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      background: #f8fafc;
+      padding: 10px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+    }
+
+    .min-stat-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .min-stat-v {
+      font-size: 15px;
+      font-weight: 800;
+      color: #0f172a;
+    }
+
+    .min-stat-l {
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    .wa-share-btn {
+      width: 100%;
+      padding: 13px 14px;
+      background: #16a34a;
+      color: #ffffff;
+      border: none;
+      border-radius: 12px;
+      font-size: 15px;
+      font-weight: 800;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      box-shadow: 0 4px 14px rgba(22, 163, 74, 0.3);
+    }
+
+    .wa-share-btn:active {
+      transform: scale(0.99);
+    }
+
+    .modal-backdrop {
+      position: absolute;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.65);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 12px;
+      z-index: 50;
+    }
+
+    .modal-backdrop.open { display: flex; }
+
+    .modal-card {
+      background: #ffffff;
+      width: 100%;
+      max-width: 480px;
+      max-height: 86dvh;
+      border-radius: 14px;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .modal-header {
+      padding: 12px 14px;
+      background: #1e3a8a;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-weight: 800;
+      font-size: 14px;
+    }
+
+    .modal-body {
+      padding: 12px 14px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .filter-tabs {
+      display: flex;
+      gap: 6px;
+    }
+
+    .filter-tab {
+      flex: 1;
+      padding: 7px;
+      border-radius: 7px;
+      border: 1px solid var(--border);
+      background: #f8fafc;
+      font-weight: 700;
+      font-size: 13px;
+      cursor: pointer;
+    }
+
+    .filter-tab.active {
+      background: var(--primary);
+      color: #ffffff;
+      border-color: var(--primary);
+    }
+
+    .sync-box {
+      background: #f8fafc;
+      border: 1px dashed #94a3b8;
+      border-radius: 9px;
+      padding: 9px 10px;
+      font-size: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .sync-actions {
+      display: flex;
+      gap: 6px;
+    }
+
+    .mini-btn {
+      flex: 1;
+      padding: 6px 8px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      background: #ffffff;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .inline-input-row {
+      display: none;
+      flex-direction: column;
+      gap: 6px;
+      margin-top: 4px;
+    }
+
+    .inline-input-row.open {
+      display: flex;
+    }
+
+    .status-toast {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--success);
+      min-height: 16px;
+    }
+
+    table.rating-tbl {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+
+    table.rating-tbl th, table.rating-tbl td {
+      padding: 7px 6px;
+      border-bottom: 1px solid var(--border);
+      text-align: left;
+    }
+
+    table.rating-tbl th {
+      background: #f1f5f9;
+      font-weight: 800;
+    }
+  </style>
+</head>
+<body oncontextmenu="return false;" oncopy="return false;" oncut="return false;">
+
+<div id="privacyShield">
+  <div style="font-size:42px;">🔒</div>
+  <div style="font-size:18px; font-weight:800;">Ҳимояи имтиҳон фаъол аст!</div>
+  <div style="font-size:13px; color:#cbd5e1; max-width:300px;">
+    Ҳангоми супоридани тест гирифтани скриншот ва баромадан аз барнома манъ аст.
+  </div>
+  <button type="button" class="primary-btn" style="max-width:240px; margin-top:8px;" onclick="hidePrivacyShield()">Бозгашт ба тест ▶</button>
+</div>
+
+<div id="app">
+  <div class="top-bar">
+    <div class="top-bar-left">
+      <div id="timerBox" class="timer-pill" style="display:none;">⏱ <span id="timerText">45:00</span></div>
+      <div id="headerTitle" class="student-badge">ММТ / ИМД • Механика & Термодинамика</div>
+    </div>
+    <div class="top-bar-actions">
+      <button type="button" class="icon-btn" onclick="openRating()">📊 Рейтинг</button>
+      <button type="button" class="icon-btn" id="fsToggleBtn" onclick="toggleFullScreen()" title="Весь экран">⛶</button>
+    </div>
+  </div>
+
+  <div id="startScreen" class="screen active">
+    <div class="start-body">
+      <button type="button" class="fs-banner-btn" id="startFsBtn" onclick="toggleFullScreen()">
+        <span>⛶</span> <span id="startFsLabel">Ба пуррагии экран / На весь экран</span>
+      </button>
+
+      <div class="hero-card">
+        <span class="hero-tag">ММТ / ИМД • ИМТИҲОНИ ФИЗИКА</span>
+        <h1>Механика ва Термодинамика</h1>
+        <p>Танҳо аз рӯи бахшҳои Механика ва Физикаи молекулавӣ / Термодинамика</p>
+        <div class="stats-row">
+          <div class="stat-box">
+            <div class="stat-val">27</div>
+            <div class="stat-lbl">Савол</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-val">32</div>
+            <div class="stat-lbl">Холи макс</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-val">45 дақ</div>
+            <div class="stat-lbl">Вақт</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="studentName">Ном ва насаби хонанда:</label>
+        <input type="text" id="studentName" class="text-input" placeholder="Масалан: Назаров Анушервон" autocomplete="name" />
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Гурӯҳро интихоб кунед:</label>
+        <div class="group-grid">
+          <button type="button" class="group-btn" data-group="5-А" onclick="selectGroup('5-А', this)">Гурӯҳи 5-А</button>
+          <button type="button" class="group-btn" data-group="5-В" onclick="selectGroup('5-В', this)">Гурӯҳи 5-В</button>
+        </div>
+      </div>
+
+      <div id="startError" class="error-msg"></div>
+
+      <button type="button" class="primary-btn" onclick="startQuiz()">Оғози имтиҳон ▶</button>
+    </div>
+  </div>
+
+  <div id="quizScreen" class="screen">
+    <div id="watermarkOverlay"></div>
+    <div id="qNavStrip" class="q-nav-strip"></div>
+    <div id="qScrollArea" class="q-scroll-area"></div>
+    <div class="bottom-nav">
+      <button type="button" class="nav-btn" id="prevBtn" onclick="prevQuestion()">◀ Қаблӣ</button>
+      <button type="button" class="nav-btn next" id="nextBtn" onclick="nextQuestion()">Баъдӣ ▶</button>
+      <button type="button" class="nav-btn finish" id="finishBtn" onclick="openConfirmModal()" style="display:none;">Анҷом ✔</button>
+    </div>
+  </div>
+
+  <div id="resultScreen" class="screen">
+    <div class="res-scroll" id="resultBody"></div>
+    <div class="bottom-nav">
+      <button type="button" class="nav-btn" onclick="openRating()">📊 Рейтинг</button>
+      <button type="button" class="nav-btn next" onclick="restartApp()">Аз нав ↻</button>
+    </div>
+  </div>
+
+  <div id="confirmModal" class="modal-backdrop" onclick="if(event.target===this) closeConfirmModal()">
+    <div class="modal-card" style="max-width:340px;">
+      <div class="modal-header">
+        <span>Анҷом додани имтиҳон</span>
+        <button type="button" class="icon-btn" onclick="closeConfirmModal()">✕</button>
+      </div>
+      <div class="modal-body">
+        <div id="confirmText" style="font-size:14px; font-weight:600; color:#334155;"></div>
+        <div style="display:flex; gap:8px; margin-top:4px;">
+          <button type="button" class="nav-btn" onclick="closeConfirmModal()">Бозгашт</button>
+          <button type="button" class="nav-btn finish" onclick="closeConfirmModal(); finishQuiz();">Анҷом ✔</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="ratingModal" class="modal-backdrop" onclick="if(event.target===this) closeRating()">
+    <div class="modal-card">
+      <div class="modal-header">
+        <span>📊 Рейтинги умумии кушода (JSON)</span>
+        <button type="button" class="icon-btn" onclick="closeRating()">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="filter-tabs">
+          <button type="button" class="filter-tab active" onclick="renderRatingTable('ALL', this)">Ҳама</button>
+          <button type="button" class="filter-tab" onclick="renderRatingTable('5-А', this)">5-А</button>
+          <button type="button" class="filter-tab" onclick="renderRatingTable('5-В', this)">5-В</button>
+        </div>
+        <div id="ratingTableWrap"></div>
+        <div class="sync-box">
+          <div style="font-weight:700; color:#334155;">📥 Воридсозии натиҷа (JSON / Истинод):</div>
+          <div style="color:#64748b;">Истинод ё рамзи хонандаро барои дидани ҳамагӣ ворид кунед:</div>
+          <div class="sync-actions">
+            <button type="button" class="mini-btn" onclick="toggleImportBox()">+ Иловаи JSON</button>
+            <button type="button" class="mini-btn" onclick="copyRatingLink()">🔗 Нусхаи рейтинг</button>
+          </div>
+          <div id="importBoxRow" class="inline-input-row">
+            <input type="text" id="importCodeInput" class="text-input" style="padding:8px 10px; font-size:13px;" placeholder="Истинод ё JSON-и хонандаро гузоред..." />
+            <button type="button" class="nav-btn next" style="height:32px; font-size:13px;" onclick="submitStudentCode()">Сабт кардан</button>
+          </div>
+          <div id="ratingToast" class="status-toast"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // ВСТРОЕННЫЙ БАЗОВЫЙ JSON РЕЙТИНГ (Доступен всем для просмотра и синхронизации)
+  let GLOBAL_RATINGS_JSON = [
+    { name: "Назаров Анушервон", group: "5-А", score: 31, max: 32, correct: 26, pct: 97, time: "28:15", date: "18.06.2026" },
+    { name: "Раҳимова Мадина", group: "5-В", score: 29, max: 32, correct: 24, pct: 91, time: "31:40", date: "18.06.2026" },
+    { name: "Каримов Беҳрӯз", group: "5-А", score: 27, max: 32, correct: 22, pct: 84, time: "34:10", date: "18.06.2026" }
+  ];
+
+  // 27 ВОПРОСОВ СТРОГО ПО МЕХАНИКЕ И МОЛЕКУЛЯРНОЙ ФИЗИКЕ / ТЕРМОДИНАМИКЕ (ИМД / ММТ СТАНДАРТ)
+  const QUESTIONS = [
+    // --- ҚИСМИ А: 22 саволи пӯшида (Механика ва Молекулавӣ/Термодинамика) ---
+    { id: 1, part: "ҚИСМИ А • 1 ХОЛ", topic: "Кинематика", type: "mc",
+      q: "1. Ҳаракате, ки дар он ҷисм дар фосилаҳои баробари вақт масофаҳои баробарро тай мекунад, чӣ ном дорад?",
+      options: ["Ҳаракати номунтазам", "Ҳаракати мунтазам", "Ҳаракати каҷхатта", "Ҳаракати чархзананда"], ans: 1, pts: 1 },
+    { id: 2, part: "ҚИСМИ А • 1 ХОЛ", topic: "Кинематика", type: "mc",
+      q: "2. Ҳангоми ҳаракати мунтазам дар давра вектори шитоби марказшитоб чӣ гуна равона карда шудааст?",
+      options: ["Аз рӯи расанда ба самти ҳаракат", "Аз маркази давра ба берун", "Ба маркази давра", "Муқобили самти суръат"], ans: 2, pts: 1 },
+    { id: 3, part: "ҚИСМИ А • 1 ХОЛ", topic: "Динамика", type: "mc",
+      q: "3. Дар кадом системаҳои сарҳисоб қонунҳои Нютон иҷро мешаванд?",
+      options: ["Дар ҳама гуна системаҳо", "Танҳо дар системаҳои инерсиалӣ", "Танҳо дар системаҳои шитобдор", "Дар системаҳои чархзананда"], ans: 1, pts: 1 },
+    { id: 4, part: "ҚИСМИ А • 1 ХОЛ", topic: "Динамика ва Гравитатсия", type: "mc",
+      q: "4. Агар масофаи байни ду ҷисми нуқтагӣ 2 маротиба зиёд карда шавад, қувваи ҷозибаи умумиҷаҳонии байни онҳо чӣ гуна тағйир меёбад?",
+      options: ["2 маротиба кам мешавад", "4 маротиба кам мешавад", "2 маротиба зиёд мешавад", "4 маротиба зиёд мешавад"], ans: 1, pts: 1 },
+    { id: 5, part: "ҚИСМИ А • 1 ХОЛ", topic: "Гидростатика", type: "mc",
+      q: "5. Фишоре, ки ба моеъ ё газ оварда мешавад, ба ҳамаи нуқтаҳои он бе тағйир мегузарад. Ин баёни кадом қонун аст?",
+      options: ["Қонуни Архимед", "Қонуни Паскал", "Қонуни Ҳук", "Қонуни Бойл-Мариотт"], ans: 1, pts: 1 },
+    { id: 6, part: "ҚИСМИ А • 1 ХОЛ", topic: "Гидростатика ва Архимед", type: "mc",
+      q: "6. Ба ҷисми ҳаҷмаш 0,02 м³, ки пурра ба об ғӯтонида шудааст, чӣ қадар қувваи Архимед таъсир мекунад? (ρ = 1000 кг/м³, g = 10 м/с²)",
+      options: ["20 Н", "200 Н", "2000 Н", "2 Н"], ans: 1, pts: 1 },
+    { id: 7, part: "ҚИСМИ А • 1 ХОЛ", topic: "Лаппишҳо ва мавҷҳо", type: "mc",
+      q: "7. Даври лаппиши раққосаки математикӣ аз кадом бузургӣ вобаста аст?",
+      options: ["Аз массаи саққоча", "Аз амплитудаи лаппиш", "Аз дарозии ришта ва шитоби афтиши озод", "Аз зичии моддаи саққоча"], ans: 2, pts: 1 },
+    { id: 8, part: "ҚИСМИ А • 1 ХОЛ", topic: "Молекулавӣ", type: "mc",
+      q: "8. Адади Авогадро (Nₐ) ба чӣ баробар аст?",
+      options: ["1,38·10⁻²³ Ҷ/К", "6,02·10²³ мол⁻¹", "8,31 Ҷ/(мол·К)", "1,6·10⁻¹⁹ Кл"], ans: 1, pts: 1 },
+    { id: 9, part: "ҚИСМИ А • 1 ХОЛ", topic: "Молекулавӣ-Кинетикӣ", type: "mc",
+      q: "9. Муодилаи асосии назарияи молекулавӣ-кинетикии гази идеалӣ кадом аст?",
+      options: ["P = (1/3) n m₀ v²", "P V = ν R T", "U = (3/2) ν R T", "E = (3/2) k T"], ans: 0, pts: 1 },
+    { id: 10, part: "ҚИСМИ А • 1 ХОЛ", topic: "Молекулавӣ", type: "mc",
+      q: "10. Ҳарорати 27 °C дар ҷадвали мутлақи Келвин ба чанд баробар аст?",
+      options: ["246 К", "273 К", "300 К", "327 К"], ans: 2, pts: 1 },
+    { id: 11, part: "ҚИСМИ А • 1 ХОЛ", topic: "Молекулавӣ", type: "mc",
+      q: "11. Миқдори моддаи 64 г оксиген (M = 32 г/мол) ба чанд баробар аст?",
+      options: ["0,5 мол", "2 мол", "32 мол", "96 мол"], ans: 1, pts: 1 },
+    { id: 12, part: "ҚИСМИ А • 1 ХОЛ", topic: "Қонунҳои газҳо", type: "mc",
+      q: "12. Дар раванди изотермӣ ҳаҷми гази идеалӣ 3 маротиба кам карда шуд. Фишори газ чӣ тавр тағйир меёбад?",
+      options: ["3 маротиба кам мешавад", "3 маротиба зиёд мешавад", "Тағйир намеёбад", "9 маротиба зиёд мешавад"], ans: 1, pts: 1 },
+    { id: 13, part: "ҚИСМИ А • 1 ХОЛ", topic: "Қонунҳои газҳо", type: "mc",
+      q: "13. Дар раванди изобарӣ ҳарорати мутлақи газ 2 маротиба зиёд шуд. Ҳаҷми газ чӣ гуна тағйир меёбад?",
+      options: ["2 маротиба зиёд мешавад", "2 маротиба кам мешавад", "Тағйир намеёбад", "4 маротиба зиёд мешавад"], ans: 0, pts: 1 },
+    { id: 14, part: "ҚИСМИ А • 1 ХОЛ", topic: "Термодинамика", type: "mc",
+      q: "14. Энергияи дохилии 2 мол гази идеалии як-атома дар ҳарорати 300 К чӣ қадар аст? (R = 8,3 Ҷ/(мол·К))",
+      options: ["3735 Ҷ", "4980 Ҷ", "7470 Ҷ", "2490 Ҷ"], ans: 2, pts: 1 },
+    { id: 15, part: "ҚИСМИ А • 1 ХОЛ", topic: "Термодинамика", type: "mc",
+      q: "15. Ба газ 500 Ҷ миқдори гармӣ дода шуд ва газ 200 Ҷ кор иҷро кард. Тағйироти энергияи дохилии газро ёбед.",
+      options: ["700 Ҷ", "300 Ҷ", "-300 Ҷ", "2,5 Ҷ"], ans: 1, pts: 1 },
+    { id: 16, part: "ҚИСМИ А • 1 ХОЛ", topic: "Термодинамика", type: "mc",
+      q: "16. Барои гудохтани 2 кг ях дар ҳарорати 0 °C чӣ қадар миқдори гармӣ лозим аст? (λ = 3,3·10⁵ Ҷ/кг)",
+      options: ["165 кҶ", "330 кҶ", "660 кҶ", "66 кҶ"], ans: 2, pts: 1 },
+    { id: 17, part: "ҚИСМИ А • 1 ХОЛ", topic: "Термодинамика", type: "mc",
+      q: "17. Ҳангоми бухоршавии моеъ (бе додани гармӣ аз берун) ҳарорати моеъ чӣ гуна тағйир меёбад?",
+      options: ["Баланд мешавад", "Паст мешавад", "Тағйир намеёбад", "Аввал баланд шуда, баъд паст мешавад"], ans: 1, pts: 1 },
+    { id: 18, part: "ҚИСМИ А • 1 ХОЛ", topic: "Мошинҳои ҳароратӣ", type: "mc",
+      q: "18. Ҳарорати гармкунаки мошини Карно 500 К ва ҳарорати хунуккунаки он 300 К аст. Коэффитсиенти кори фоиданоки (ККФ) мошинро ёбед.",
+      options: ["20%", "40%", "60%", "80%"], ans: 1, pts: 1 },
+    { id: 19, part: "ҚИСМИ А • 1 ХОЛ", topic: "Динамика", type: "mc",
+      q: "19. Ба ҷисми массааш 4 кг қувваи 12 Н таъсир мекунад. Шитоби ҷисмро муайян кунед.",
+      options: ["48 м/с²", "3 м/с²", "0,33 м/с²", "8 м/с²"], ans: 1, pts: 1 },
+    { id: 20, part: "ҚИСМИ А • 1 ХОЛ", topic: "Қонунҳои бақо", type: "mc",
+      q: "20. Импулси ҷисми массааш 3 кг, ки бо суръати 4 м/с ҳаракат мекунад, ба чанд баробар аст?",
+      options: ["0,75 кг·м/с", "7 кг·м/с", "12 кг·м/с", "24 кг·м/с"], ans: 2, pts: 1 },
+    { id: 21, part: "ҚИСМИ А • 1 ХОЛ", topic: "Кор ва энергия", type: "mc",
+      q: "21. Энергияи кинетикии ҷисми массааш 2 кг, ки бо суръати 6 м/с ҳаракат мекунад, чӣ қадар аст?",
+      options: ["6 Ҷ", "12 Ҷ", "36 Ҷ", "72 Ҷ"], ans: 2, pts: 1 },
+    { id: 22, part: "ҚИСМИ А • 1 ХОЛ", topic: "Кор ва энергия", type: "mc",
+      q: "22. Кран бори массааш 500 кг-ро дар муддати 10 с ба баландии 8 м бардошт. Тавоноии кранро ҳисоб кунед (g = 10 м/с²).",
+      options: ["400 Вт", "4000 Вт", "40000 Вт", "5000 Вт"], ans: 1, pts: 1 },
+
+    // --- ҚИСМИ Б: 2 саволи мувофиқоварӣ (2 холӣ = 4 хол) ---
+    { id: 23, part: "ҚИСМИ Б • 2 ХОЛ", topic: "Формулаҳои Кинематика ва Динамика", type: "match",
+      q: "23. Мувофиқати байни бузургиҳои физикӣ ва формулаҳои онҳоро дар механика муайян кунед:",
+      items: ["A) Суръати ҳаракати ростхаттаи мунтазам", "B) Шитоби марказшитоб", "C) Қувваи соиши лағжиш"],
+      choices: ["1) at² / 2", "2) v² / R", "3) S / t", "4) μ · N"],
+      ans: ["3", "2", "4"], pts: 2 },
+    { id: 24, part: "ҚИСМИ Б • 2 ХОЛ", topic: "Равандҳои термодинамикӣ", type: "match",
+      q: "24. Мувофиқати байни равандҳои термодинамикӣ ва шартҳои асосии онҳоро ёбед:",
+      items: ["A) Раванди изотермӣ", "B) Раванди изохорӣ", "C) Раванди адиабатӣ"],
+      choices: ["1) Q = 0", "2) V = const", "3) T = const", "4) P = const"],
+      ans: ["3", "2", "1"], pts: 2 },
+
+    // --- ҚИСМИ В: 3 масъалаи кушодаи ададӣ (2 холӣ = 6 хол) ---
+    { id: 25, part: "ҚИСМИ В • 2 ХОЛ", topic: "Масъалаи Механика", type: "num",
+      q: "25. Ҷисм аз баландии 80 м бе суръати ибтидоӣ озодона меафтад. Вақти афтиши ҷисмро то замин бо сония (с) ҳисоб кунед. (g = 10 м/с²)",
+      unit: "с", ans: 4, pts: 2 },
+    { id: 26, part: "ҚИСМИ В • 2 ХОЛ", topic: "Масъалаи Кор ва Энергия", type: "num",
+      q: "26. Автомобили массааш 1000 кг суръати худро аз 10 м/с то 20 м/с зиёд кард. Кори қувваи муҳаррикро бо килоҷоул (кҶ) ёбед (соишро ба назар нагиред).",
+      unit: "кҶ", ans: 150, pts: 2 },
+    { id: 27, part: "ҚИСМИ В • 2 ХОЛ", topic: "Масъалаи Термодинамика", type: "num",
+      q: "27. Барои гарм кардани 2 кг об аз 20 °C то 70 °C чӣ қадар миқдори гармӣ лозим аст? Ҷавобро бо килоҷоул (кҶ) нависед. (c = 4200 Ҷ/(кг·°C))",
+      unit: "кҶ", ans: 420, pts: 2 }
+  ];
+
+  let isQuizActive = false;
+  let lastResultData = null;
+
+  let state = {
+    studentName: "",
+    group: "",
+    currentIdx: 0,
+    answers: {},
+    secondsLeft: 45 * 60,
+    timerId: null
+  };
+
+  function triggerPrivacyShield() {
+    if (!isQuizActive) return;
+    document.getElementById("privacyShield").classList.add("active");
+  }
+
+  function hidePrivacyShield() {
+    document.getElementById("privacyShield").classList.remove("active");
+  }
+
+  document.addEventListener("visibilitychange", () => {
+    if (document.hidden && isQuizActive) {
+      triggerPrivacyShield();
+    }
+  });
+
+  window.addEventListener("blur", () => {
+    if (isQuizActive) {
+      triggerPrivacyShield();
+    }
+  });
+
+  window.addEventListener("keyup", (e) => {
+    if (!isQuizActive) return;
+    if (e.key === "PrintScreen" || e.keyCode === 44) {
+      copyTextFallback("");
+      triggerPrivacyShield();
+    }
+  });
+
+  window.addEventListener("keydown", (e) => {
+    if (!isQuizActive) return;
+    if ((e.ctrlKey || e.metaKey) && ["p", "s", "c", "u"].includes(e.key.toLowerCase())) {
+      e.preventDefault();
+      triggerPrivacyShield();
+    }
+    if (e.metaKey && e.shiftKey && ["3", "4", "5"].includes(e.key)) {
+      e.preventDefault();
+      triggerPrivacyShield();
+    }
+  });
+
+  function renderWatermarks() {
+    const wm = document.getElementById("watermarkOverlay");
+    const label = `${state.studentName} • ${state.group}`;
+    wm.innerHTML = Array(18).fill(`<span>${label}</span>`).join("");
+    wm.style.display = "flex";
+  }
+
+  function encodePayload(obj) {
+    try {
+      const json = JSON.stringify(obj);
+      return btoa(unescape(encodeURIComponent(json)));
+    } catch (e) {
+      return "";
+    }
+  }
+
+  function decodePayload(str) {
+    try {
+      const json = decodeURIComponent(escape(atob(str)));
+      return JSON.parse(json);
+    } catch (e) {
+      return null;
+    }
+  }
+
+  function getRatings() {
+    let list = [...GLOBAL_RATINGS_JSON];
+    try {
+      const saved = JSON.parse(localStorage.getItem("mmt_phys_mech_thermo_ratings") || "null");
+      if (Array.isArray(saved) && saved.length) list = saved;
+    } catch (e) {}
+
+    const params = new URLSearchParams(window.location.search);
+    const hashParams = new URLSearchParams(window.location.hash.replace(/^#/, ""));
+    const packed = params.get("r") || hashParams.get("r");
+    if (packed) {
+      const imported = decodePayload(packed);
+      if (Array.isArray(imported)) {
+        imported.forEach(item => mergeRatingItem(list, item));
+        saveRatingsList(list);
+      } else if (imported && imported.name) {
+        mergeRatingItem(list, imported);
+        saveRatingsList(list);
+      }
+    }
+    return list;
+  }
+
+  function mergeRatingItem(list, item) {
+    if (!item || !item.name || !item.group) return;
+    const exists = list.some(x => x.name.toLowerCase() === item.name.toLowerCase() && x.group === item.group && x.score === item.score && x.time === item.time);
+    if (!exists) {
+      list.push(item);
+    }
+  }
+
+  function saveRatingsList(list) {
+    list.sort((a, b) => b.score - a.score || a.time.localeCompare(b.time));
+    try {
+      localStorage.setItem("mmt_phys_mech_thermo_ratings", JSON.stringify(list.slice(0, 100)));
+    } catch (e) {}
+  }
+
+  function saveRating(entry) {
+    const list = getRatings();
+    mergeRatingItem(list, entry);
+    saveRatingsList(list);
+  }
+
+  function toggleFullScreen() {
+    const doc = window.document;
+    const docEl = doc.documentElement;
+    const reqFs = docEl.requestFullscreen || docEl.mozRequestFullScreen || docEl.webkitRequestFullScreen || docEl.msRequestFullscreen;
+    const exitFs = doc.exitFullscreen || doc.mozCancelFullScreen || doc.webkitExitFullscreen || doc.msExitFullscreen;
+    const isFs = doc.fullscreenElement || doc.mozFullScreenElement || doc.webkitFullscreenElement || doc.msFullscreenElement;
+
+    if (!isFs) {
+      if (reqFs) reqFs.call(docEl).catch(() => {});
+    } else {
+      if (exitFs) exitFs.call(doc).catch(() => {});
+    }
+  }
+
+  document.addEventListener("fullscreenchange", updateFsLabel);
+  document.addEventListener("webkitfullscreenchange", updateFsLabel);
+
+  function updateFsLabel() {
+    const isFs = document.fullscreenElement || document.webkitFullscreenElement;
+    const lbl = document.getElementById("startFsLabel");
+    const btn = document.getElementById("fsToggleBtn");
+    if (lbl) lbl.textContent = isFs ? "Баромадан аз экрани пурра" : "Ба пуррагии экран / На весь экран";
+    if (btn) btn.textContent = isFs ? "🗗" : "⛶";
+  }
+
+  function selectGroup(grp, el) {
+    state.group = grp;
+    document.querySelectorAll(".group-btn").forEach(b => b.classList.remove("selected"));
+    el.classList.add("selected");
+    document.getElementById("startError").textContent = "";
+  }
+
+  function showScreen(id) {
+    document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
+    document.getElementById(id).classList.add("active");
+  }
+
+  function startQuiz() {
+    const nameInput = document.getElementById("studentName").value.trim();
+    const errEl = document.getElementById("startError");
+
+    if (!nameInput) {
+      errEl.textContent = "Лутфан ном ва насаби худро ворид кунед!";
+      return;
+    }
+    if (!state.group) {
+      errEl.textContent = "Лутфан гурӯҳи 5-А ё 5-В-ро интихоб кунед!";
+      return;
+    }
+
+    state.studentName = nameInput;
+    state.currentIdx = 0;
+    state.answers = {};
+    state.secondsLeft = 45 * 60;
+    isQuizActive = true;
+
+    document.getElementById("timerBox").style.display = "flex";
+    document.getElementById("headerTitle").textContent = `${state.studentName} (${state.group})`;
+    renderWatermarks();
+
+    showScreen("quizScreen");
+    renderNavStrip();
+    renderQuestion();
+    startTimer();
+  }
+
+  function startTimer() {
+    clearInterval(state.timerId);
+    updateTimerUI();
+    state.timerId = setInterval(() => {
+      state.secondsLeft--;
+      updateTimerUI();
+      if (state.secondsLeft <= 0) {
+        clearInterval(state.timerId);
+        finishQuiz();
+      }
+    }, 1000);
+  }
+
+  function updateTimerUI() {
+    const m = Math.floor(Math.max(0, state.secondsLeft) / 60);
+    const s = Math.max(0, state.secondsLeft) % 60;
+    document.getElementById("timerText").textContent = `${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}`;
+    const box = document.getElementById("timerBox");
+    if (state.secondsLeft <= 300) {
+      box.classList.add("warning");
+    } else {
+      box.classList.remove("warning");
+    }
+  }
+
+  function isAnswered(q) {
+    const a = state.answers[q.id];
+    if (q.type === "mc") return typeof a === "number";
+    if (q.type === "match") return Array.isArray(a) && a.length === 3 && a.every(v => v !== "");
+    if (q.type === "num") return a !== undefined && String(a).trim() !== "";
+    return false;
+  }
+
+  function renderNavStrip() {
+    const strip = document.getElementById("qNavStrip");
+    strip.innerHTML = "";
+    QUESTIONS.forEach((q, idx) => {
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "q-dot" + (idx === state.currentIdx ? " current" : "") + (isAnswered(q) ? " answered" : "");
+      btn.textContent = q.id;
+      btn.onclick = () => {
+        state.currentIdx = idx;
+        renderNavStrip();
+        renderQuestion();
+      };
+      strip.appendChild(btn);
+    });
+    const activeDot = strip.children[state.currentIdx];
+    if (activeDot) {
+      activeDot.scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" });
+    }
+  }
+
+  function renderQuestion() {
+    const q = QUESTIONS[state.currentIdx];
+    const area = document.getElementById("qScrollArea");
+    const letters = ["A", "B", "C", "D"];
+
+    let html = `
+      <div class="q-meta-row">
+        <span class="q-part-badge">${q.part}</span>
+        <span class="q-topic-text">${q.topic}</span>
+      </div>
+      <div class="q-text">${q.q}</div>
+    `;
+
+    if (q.type === "mc") {
+      html += `<div class="options-list">`;
+      q.options.forEach((opt, i) => {
+        const sel = state.answers[q.id] === i ? " selected" : "";
+        html += `
+          <button type="button" class="option-card${sel}" onclick="chooseMC(${q.id}, ${i})">
+            <span class="option-letter">${letters[i]}</span>
+            <span class="option-text">${opt}</span>
+          </button>
+        `;
+      });
+      html += `</div>`;
+    } else if (q.type === "match") {
+      const cur = state.answers[q.id] || ["", "", ""];
+      html += `<div class="matching-box">
+        <div class="match-choices-ref"><strong>Вариантҳо:</strong> ${q.choices.join(" &nbsp;|&nbsp; ")}</div>`;
+      q.items.forEach((item, i) => {
+        html += `
+          <div class="match-row">
+            <span class="match-prompt">${item}</span>
+            <select class="match-select" onchange="chooseMatch(${q.id}, ${i}, this.value)">
+              <option value="">—</option>
+              <option value="1" ${cur[i]==="1"?"selected":""}>1</option>
+              <option value="2" ${cur[i]==="2"?"selected":""}>2</option>
+              <option value="3" ${cur[i]==="3"?"selected":""}>3</option>
+              <option value="4" ${cur[i]==="4"?"selected":""}>4</option>
+            </select>
+          </div>
+        `;
+      });
+      html += `</div>`;
+    } else if (q.type === "num") {
+      const val = state.answers[q.id] !== undefined ? state.answers[q.id] : "";
+      html += `
+        <div class="numeric-box">
+          <label class="form-label">Ҷавоби ададиро ворид кунед (${q.unit}):</label>
+          <input type="number" step="any" class="text-input" value="${val}" placeholder="Ададро нависед..." oninput="enterNum(${q.id}, this.value)" />
+        </div>
+      `;
+    }
+
+    area.innerHTML = html;
+
+    document.getElementById("prevBtn").disabled = state.currentIdx === 0;
+    const isLast = state.currentIdx === QUESTIONS.length - 1;
+    document.getElementById("nextBtn").style.display = isLast ? "none" : "block";
+    document.getElementById("finishBtn").style.display = isLast ? "block" : "none";
+  }
+
+  function chooseMC(qId, optIdx) {
+    state.answers[qId] = optIdx;
+    renderNavStrip();
+    renderQuestion();
+  }
+
+  function chooseMatch(qId, rowIdx, val) {
+    if (!Array.isArray(state.answers[qId])) state.answers[qId] = ["", "", ""];
+    state.answers[qId][rowIdx] = val;
+    renderNavStrip();
+  }
+
+  function enterNum(qId, val) {
+    state.answers[qId] = val;
+    renderNavStrip();
+  }
+
+  function prevQuestion() {
+    if (state.currentIdx > 0) {
+      state.currentIdx--;
+      renderNavStrip();
+      renderQuestion();
+    }
+  }
+
+  function nextQuestion() {
+    if (state.currentIdx < QUESTIONS.length - 1) {
+      state.currentIdx++;
+      renderNavStrip();
+      renderQuestion();
+    }
+  }
+
+  function openConfirmModal() {
+    const unanswered = QUESTIONS.filter(q => !isAnswered(q)).length;
+    const txt = document.getElementById("confirmText");
+    if (unanswered > 0) {
+      txt.textContent = `Шумо ба ${unanswered} савол ҷавоб надодаед. Оё мехоҳед имтиҳонро анҷом диҳед?`;
+    } else {
+      txt.textContent = "Шумо ба ҳамаи 27 савол ҷавоб додед! Имтиҳонро анҷом медиҳед?";
+    }
+    document.getElementById("confirmModal").classList.add("open");
+  }
+
+  function closeConfirmModal() {
+    document.getElementById("confirmModal").classList.remove("open");
+  }
+
+  function finishQuiz() {
+    clearInterval(state.timerId);
+    isQuizActive = false;
+    hidePrivacyShield();
+    document.getElementById("watermarkOverlay").style.display = "none";
+
+    let totalScore = 0;
+    let correctCount = 0;
+    const maxScore = 32;
+
+    QUESTIONS.forEach(q => {
+      let earned = 0;
+      if (q.type === "mc") {
+        if (state.answers[q.id] === q.ans) earned = q.pts;
+      } else if (q.type === "match") {
+        const u = state.answers[q.id] || [];
+        if (u[0] === q.ans[0] && u[1] === q.ans[1] && u[2] === q.ans[2]) earned = q.pts;
+      } else if (q.type === "num") {
+        const u = parseFloat(String(state.answers[q.id]).replace(",", "."));
+        if (!isNaN(u) && Math.abs(u - q.ans) < 0.01) earned = q.pts;
+      }
+      totalScore += earned;
+      if (earned === q.pts) correctCount++;
+    });
+
+    const elapsed = 45 * 60 - state.secondsLeft;
+    const em = String(Math.floor(elapsed / 60)).padStart(2, "0");
+    const es = String(elapsed % 60).padStart(2, "0");
+    const timeStr = `${em}:${es}`;
+    const pct = Math.round((totalScore / maxScore) * 100);
+    const dateStr = new Date().toLocaleDateString("ru-RU");
+
+    const entry = {
+      name: state.studentName,
+      group: state.group,
+      score: totalScore,
+      max: maxScore,
+      correct: correctCount,
+      pct: pct,
+      time: timeStr,
+      date: dateStr
+    };
+
+    lastResultData = entry;
+    saveRating(entry);
+
+    document.getElementById("resultBody").innerHTML = `
+      <div class="min-result-card">
+        <div class="min-badge">НАТИҶАИ ИМТИҲОН • МЕХАНИКА & ТЕРМОДИНАМИКА</div>
+        <div class="min-name">${entry.name}</div>
+        <div class="min-group">Гурӯҳи ${entry.group} • ${entry.date}</div>
+
+        <div class="min-score-circle">
+          <div style="font-size:12px; opacity:0.85; font-weight:700;">ХОЛИ УМУМӢ</div>
+          <div class="min-score-num">${entry.score} <span style="font-size:20px; opacity:0.8;">/ ${entry.max}</span></div>
+          <div style="font-size:14px; font-weight:700; margin-top:4px;">${entry.pct}%</div>
+        </div>
+
+        <div class="min-stats-grid">
+          <div class="min-stat-item">
+            <span class="min-stat-v">${entry.correct}/27</span>
+            <span class="min-stat-l">Дуруст</span>
+          </div>
+          <div class="min-stat-item">
+            <span class="min-stat-v">${entry.pct}%</span>
+            <span class="min-stat-l">Фоиз</span>
+          </div>
+          <div class="min-stat-item">
+            <span class="min-stat-v">${entry.time}</span>
+            <span class="min-stat-l">Вақт</span>
+          </div>
+        </div>
+
+        <button type="button" class="wa-share-btn" id="waShareBtn" onclick="shareResultToWhatsApp()">
+          <span>📲</span> <span>Поделиться дар WhatsApp (Расм)</span>
+        </button>
+      </div>
+    `;
+
+    showScreen("resultScreen");
+  }
+
+  function generateResultCardBlob(data) {
+    return new Promise((resolve) => {
+      const canvas = document.createElement("canvas");
+      canvas.width = 900;
+      canvas.height = 1120;
+      const ctx = canvas.getContext("2d");
+
+      const bgGrad = ctx.createLinearGradient(0, 0, 900, 1120);
+      bgGrad.addColorStop(0, "#0f172a");
+      bgGrad.addColorStop(1, "#1e3a8a");
+      ctx.fillStyle = bgGrad;
+      ctx.fillRect(0, 0, 900, 1120);
+
+      ctx.fillStyle = "#ffffff";
+      roundRect(ctx, 60, 80, 780, 960, 36);
+      ctx.fill();
+
+      const topGrad = ctx.createLinearGradient(60, 80, 840, 260);
+      topGrad.addColorStop(0, "#1d4ed8");
+      topGrad.addColorStop(1, "#2563eb");
+      ctx.fillStyle = topGrad;
+      roundRectTop(ctx, 60, 80, 780, 170, 36);
+      ctx.fill();
+
+      ctx.fillStyle = "#ffffff";
+      ctx.textAlign = "center";
+      ctx.font = "bold 26px sans-serif";
+      ctx.fillText("ММТ / ИМД • МЕХАНИКА & ТЕРМОДИНАМИКА", 450, 155);
+      ctx.font = "600 22px sans-serif";
+      ctx.fillStyle = "rgba(255,255,255,0.88)";
+      ctx.fillText("НАТИҶАИ РАСМИИ ХОНАНДА", 450, 202);
+
+      ctx.fillStyle = "#eff6ff";
+      roundRect(ctx, 320, 290, 260, 56, 28);
+      ctx.fill();
+      ctx.fillStyle = "#1d4ed8";
+      ctx.font = "bold 28px sans-serif";
+      ctx.fillText(`ГУРӮҲИ ${data.group}`, 450, 328);
+
+      ctx.fillStyle = "#0f172a";
+      ctx.font = "bold 40px sans-serif";
+      wrapText(ctx, data.name, 450, 415, 700, 48);
+
+      ctx.fillStyle = "#f1f5f9";
+      roundRect(ctx, 130, 510, 640, 230, 28);
+      ctx.fill();
+
+      ctx.fillStyle = "#64748b";
+      ctx.font = "bold 24px sans-serif";
+      ctx.fillText("ХОЛИ БАДАСТОВАРДА", 450, 562);
+
+      ctx.fillStyle = "#1d4ed8";
+      ctx.font = "900 92px sans-serif";
+      ctx.fillText(`${data.score} / ${data.max}`, 450, 662);
+
+      ctx.fillStyle = "#16a34a";
+      ctx.font = "bold 32px sans-serif";
+      ctx.fillText(`Натиҷа: ${data.pct}%`, 450, 715);
+
+      ctx.fillStyle = "#334155";
+      ctx.font = "bold 26px sans-serif";
+      ctx.fillText(`Саволҳои дуруст: ${data.correct} аз 27`, 450, 815);
+      ctx.fillText(`Вақти сарфшуда: ${data.time}`, 450, 865);
+
+      ctx.fillStyle = "#94a3b8";
+      ctx.font = "600 22px sans-serif";
+      ctx.fillText(`Сана: ${data.date}`, 450, 960);
+
+      canvas.toBlob((blob) => resolve(blob), "image/png");
+    });
+  }
+
+  function roundRect(ctx, x, y, w, h, r) {
+    ctx.beginPath();
+    ctx.moveTo(x + r, y);
+    ctx.arcTo(x + w, y, x + w, y + h, r);
+    ctx.arcTo(x + w, y + h, x, y + h, r);
+    ctx.arcTo(x, y + h, x, y, r);
+    ctx.arcTo(x, y, x + w, y, r);
+    ctx.closePath();
+  }
+
+  function roundRectTop(ctx, x, y, w, h, r) {
+    ctx.beginPath();
+    ctx.moveTo(x + r, y);
+    ctx.arcTo(x + w, y, x + w, y + h, r);
+    ctx.lineTo(x + w, y + h);
+    ctx.lineTo(x, y + h);
+    ctx.arcTo(x, y, x + w, y, r);
+    ctx.closePath();
+  }
+
+  function wrapText(ctx, text, x, y, maxWidth, lineHeight) {
+    const words = text.split(" ");
+    let line = "";
+    let curY = y;
+    for (let n = 0; n < words.length; n++) {
+      const testLine = line + words[n] + " ";
+      if (ctx.measureText(testLine).width > maxWidth && n > 0) {
+        ctx.fillText(line.trim(), x, curY);
+        line = words[n] + " ";
+        curY += lineHeight;
+      } else {
+        line = testLine;
+      }
+    }
+    ctx.fillText(line.trim(), x, curY);
+  }
+
+  async function shareResultToWhatsApp() {
+    if (!lastResultData) return;
+    const btn = document.getElementById("waShareBtn");
+    const origHtml = btn.innerHTML;
+    btn.innerHTML = "<span>⏳</span> <span>Омодасозии расм...</span>";
+
+    try {
+      const blob = await generateResultCardBlob(lastResultData);
+      const file = new File([blob], `Natija_${lastResultData.group}_${lastResultData.name.replace(/\s+/g, "_")}.png`, { type: "image/png" });
+
+      const syncCode = encodePayload(lastResultData);
+      const baseUrl = window.location.origin + window.location.pathname;
+      const syncLink = `${baseUrl}#r=${syncCode}`;
+      const caption = `📊 Натиҷаи имтиҳони Физика (Механика & Термодинамика)
+👤 Хонанда: ${lastResultData.name}
+🏫 Гурӯҳ: ${lastResultData.group}
+⭐ Хол: ${lastResultData.score}/${lastResultData.max} (${lastResultData.pct}%)
+⏱ Вақт: ${lastResultData.time}
+
+🔗 Истиноди рейтинги умумӣ:
+${syncLink}`;
+
+      if (navigator.canShare && navigator.canShare({ files: [file] })) {
+        await navigator.share({
+          files: [file],
+          title: "Натиҷаи имтиҳони Физика",
+          text: caption
+        });
+      } else {
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = file.name;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+
+        window.open(`https://wa.me/?text=${encodeURIComponent(caption)}`, "_blank");
+      }
+    } catch (err) {
+      console.error(err);
+    } finally {
+      btn.innerHTML = origHtml;
+    }
+  }
+
+  function openRating() {
+    document.getElementById("ratingToast").textContent = "";
+    document.getElementById("ratingModal").classList.add("open");
+    renderRatingTable("ALL", document.querySelector(".filter-tab"));
+  }
+
+  function closeRating() {
+    document.getElementById("ratingModal").classList.remove("open");
+  }
+
+  function renderRatingTable(filterGroup, tabEl) {
+    if (tabEl) {
+      document.querySelectorAll(".filter-tab").forEach(t => t.classList.remove("active"));
+      tabEl.classList.add("active");
+    }
+    let list = getRatings();
+    if (filterGroup !== "ALL") {
+      list = list.filter(r => r.group === filterGroup);
+    }
+    let rows = list.map((r, i) => `
+      <tr>
+        <td><strong>${i + 1}</strong></td>
+        <td>${r.name}</td>
+        <td><strong>${r.group}</strong></td>
+        <td><strong>${r.score}/${r.max}</strong></td>
+        <td>${r.time}</td>
+      </tr>
+    `).join("");
+
+    if (!rows) rows = `<tr><td colspan="5" style="text-align:center; color:#64748b; padding:14px;">Ҳоло натиҷа сабт нашудааст</td></tr>`;
+
+    document.getElementById("ratingTableWrap").innerHTML = `
+      <table class="rating-tbl">
+        <thead>
+          <tr><th>#</th><th>Хонанда</th><th>Гурӯҳ</th><th>Хол</th><th>Вақт</th></tr>
+        </thead>
+        <tbody>${rows}</tbody>
+      </table>
+    `;
+  }
+
+  function toggleImportBox() {
+    const row = document.getElementById("importBoxRow");
+    row.classList.toggle("open");
+    document.getElementById("ratingToast").textContent = "";
+  }
+
+  function submitStudentCode() {
+    const input = document.getElementById("importCodeInput");
+    const toast = document.getElementById("ratingToast");
+    const raw = input.value.trim();
+    if (!raw) {
+      toast.style.color = "var(--danger)";
+      toast.textContent = "Лутфан истинод ё JSON-ро ворид кунед!";
+      return;
+    }
+    let code = raw;
+    if (code.includes("r=")) {
+      code = code.split("r=").pop().split("&")[0];
+    }
+    let decoded = decodePayload(code);
+    if (!decoded) {
+      try {
+        decoded = JSON.parse(raw);
+      } catch (e) {
+        toast.style.color = "var(--danger)";
+        toast.textContent = "Формати JSON нодуруст аст!";
+        return;
+      }
+    }
+    const list = getRatings();
+    if (Array.isArray(decoded)) {
+      decoded.forEach(item => mergeRatingItem(list, item));
+    } else {
+      mergeRatingItem(list, decoded);
+    }
+    saveRatingsList(list);
+    renderRatingTable("ALL", document.querySelector(".filter-tab"));
+    input.value = "";
+    document.getElementById("importBoxRow").classList.remove("open");
+    toast.style.color = "var(--success)";
+    toast.textContent = "Натиҷа ба рейтинг илова шуд ва ҳама мебинанд!";
+  }
+
+  function copyTextFallback(text) {
+    const ta = document.createElement("textarea");
+    ta.value = text;
+    ta.style.position = "fixed";
+    ta.style.opacity = "0";
+    document.body.appendChild(ta);
+    ta.select();
+    try {
+      document.execCommand("copy");
+    } catch (e) {}
+    document.body.removeChild(ta);
+  }
+
+  function copyRatingLink() {
+    const toast = document.getElementById("ratingToast");
+    const list = getRatings();
+    if (!list.length) {
+      toast.style.color = "var(--danger)";
+      toast.textContent = "Рӯйхати рейтинг холӣ аст.";
+      return;
+    }
+    const packed = encodePayload(list);
+    const fullUrl = `${window.location.origin}${window.location.pathname}#r=${packed}`;
+    copyTextFallback(fullUrl);
+    toast.style.color = "var(--success)";
+    toast.textContent = "Истиноди рейтинги умумӣ нусхабардорӣ шуд!";
+  }
+
+  function restartApp() {
+    clearInterval(state.timerId);
+    isQuizActive = false;
+    document.getElementById("watermarkOverlay").style.display = "none";
+    document.getElementById("timerBox").style.display = "none";
+    document.getElementById("headerTitle").textContent = "ММТ / ИМД • Механика & Термодинамика";
+    showScreen("startScreen");
+  }
+
+  window.addEventListener("DOMContentLoaded", () => {
+    getRatings();
+  });
+</script>
+</body>
+</html>
